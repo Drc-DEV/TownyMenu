@@ -1,4 +1,4 @@
-# TownyMenu | Fork
+# TownyMenu | 1.18.2+ Java17+ Fork
  Spigot Plugin for Towny designed to simplify the ownership and management of Towns and Plots.
 
  
