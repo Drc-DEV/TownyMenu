@@ -1,6 +1,5 @@
 package net.tolmikarc.townymenu.town.prompt;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import lombok.SneakyThrows;
@@ -14,37 +13,37 @@ import org.mineacademy.fo.conversation.SimplePrompt;
 
 public class TownGiveMayorPrompt extends SimplePrompt {
 
-	Resident resident;
+    Resident resident;
 
-	public TownGiveMayorPrompt(Resident resident) {
-		super(false);
-		this.resident = resident;
-	}
+    public TownGiveMayorPrompt(Resident resident) {
+        super(false);
+        this.resident = resident;
+    }
 
-	@Override
-	protected String getPrompt(ConversationContext ctx) {
-		return Localization.TownConversables.Mayor.PROMPT.replace("{player}", resident.getName());
-	}
+    @Override
+    protected String getPrompt(ConversationContext ctx) {
+        return Localization.TownConversables.Mayor.PROMPT.replace("{player}", resident.getName());
+    }
 
-	@Override
-	protected boolean isInputValid(ConversationContext context, String input) {
-		return input.toLowerCase().equals(Localization.CONFIRM) || input.toLowerCase().equals(Localization.CANCEL);
-	}
+    @Override
+    protected boolean isInputValid(ConversationContext context, String input) {
+        return input.toLowerCase().equals(Localization.CONFIRM) || input.toLowerCase().equals(Localization.CANCEL);
+    }
 
-	@SneakyThrows
-	@Override
-	protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext context, @NotNull String input) {
-		if (!getPlayer(context).hasPermission("towny.command.town.set.mayor"))
-			return null;
+    @SneakyThrows
+    @Override
+    protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext context, @NotNull String input) {
+        if (!getPlayer(context).hasPermission("towny.command.town.set.mayor"))
+            return null;
 
-		if (input.toLowerCase().equals(Localization.CONFIRM)) {
-			Town town = resident.getTown();
-			town.setMayor(resident);
-			Common.tell(getPlayer(context), Localization.TownConversables.Mayor.RESPONSE.replace("{player}", resident.getName()));
-			TownyAPI.getInstance().getDataSource().saveTown(town);
-			TownyAPI.getInstance().getDataSource().saveResident(resident);
-		}
+        if (input.toLowerCase().equals(Localization.CONFIRM)) {
+            Town town = resident.getTown();
+            town.setMayor(resident);
+            Common.tell(getPlayer(context), Localization.TownConversables.Mayor.RESPONSE.replace("{player}", resident.getName()));
+            town.save();
+            resident.save();
+        }
 
-		return null;
-	}
+        return null;
+    }
 }
